@@ -3,4 +3,6 @@ spring:
     active: dev
   config:
     import: classpath:config.yml
-
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher

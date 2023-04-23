@@ -6,11 +6,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
 @SpringBootApplication
-@EnableWebMvc
 public class HafalyBeApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(HafalyBeApplication.class, args);
 	}
-
 }

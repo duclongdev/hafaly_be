@@ -1,8 +1,9 @@
 package com.project.hafaly_be.api.exception;
 
-import com.project.hafaly_be.api.exception.customError.PasswordErrorException;
-import com.project.hafaly_be.api.exception.customError.UserNotFoundException;
+import com.project.hafaly_be.api.exception.customError.*;
 import com.project.hafaly_be.api.response.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.*;
@@ -25,6 +26,17 @@ public class HandlerException {
         });
         return errors;
     }
+
+    @ExceptionHandler(InvalidArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handlerInvalidArgumentException(InvalidArgumentException ex){
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
+        return errors;
+    }
+
     @ExceptionHandler(DisabledException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handlerDisabledException(DisabledException ex){
@@ -35,7 +47,6 @@ public class HandlerException {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerUserNotFoundException(UserNotFoundException ex){
-
         return new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
     @ExceptionHandler(BadCredentialsException.class)
@@ -68,5 +79,11 @@ public class HandlerException {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handlerCredentialsExpiredException(CredentialsExpiredException ex){
         return new ErrorResponse(HttpStatus.FORBIDDEN, ex.getMessage());
+    }
+
+    @ExceptionHandler(CannotCreateUser.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerCannotCreateUser(CannotCreateUser ex){
+        return new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 }

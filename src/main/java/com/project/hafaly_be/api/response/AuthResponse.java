@@ -1,15 +1,17 @@
 package com.project.hafaly_be.api.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.hafaly_be.api.dto.UserDTO;
+import lombok.*;
+import org.springframework.http.HttpStatus;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class AuthResponse {
-    private String refreshToken;
+    @JsonIgnore
+    private HttpStatus httpStatus;
+    private Object userInfo;
     private String accessToken;
+    private String refreshTokenId;
+    private String message;
 }

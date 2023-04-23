@@ -2,19 +2,15 @@ server:
   port : 8080
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/hafaly
-    username: postgres
-    password: 123456
-    driver-class-name: org.postgresql.Driver
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    url: jdbc:postgresql://dpg-cgtrg3d269vbmevggnr0-a.singapore-postgres.render.com:5432/hafaly
+    username: hafaly_user
+    password: Yagqv56XrJTOsEWBHxqdVOZwbo6hmIjS
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
   file:
     name: hafaly.log
-  config:
-    import: classpath:config.yml
-  main:
-    allow-circular-references=true:
+logging:
+  pattern:
+    console: logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%t] %c{2} - %m%n

@@ -2,8 +2,13 @@ package com.project.hafaly_be.api.exception.customError;
 
 import com.project.hafaly_be.domain.enums.Entity;
 
+import java.text.MessageFormat;
+
 public class CannotCreateEntity extends RuntimeException{
-    private String message;
+    private String message = "Can't not create Entity";
+    public CannotCreateEntity(){
+        super();
+    }
     public CannotCreateEntity(Enum<Entity> entityEnum){
         super();
         initMessage(entityEnum);
@@ -18,5 +23,6 @@ public class CannotCreateEntity extends RuntimeException{
         if(entityEnum == Entity.USER)
             message = "user can't not create";
     }
+
 
 }
