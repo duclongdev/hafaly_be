@@ -7,10 +7,14 @@ import com.project.hafaly_be.domain.model.Family;
 import com.project.hafaly_be.domain.model.User;
 import com.project.hafaly_be.domain.repository.FamilyRepository;
 import com.project.hafaly_be.domain.service.FamilyService;
+import com.project.hafaly_be.domain.service.FileUpload;
 import com.project.hafaly_be.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.util.Date;
 import java.util.Random;
 
@@ -19,9 +23,20 @@ import java.util.Random;
 public class FamilyServiceImpl implements FamilyService {
     private final FamilyRepository familyRepository;
     private final UserService userService;
+    private final FileUpload fileUpload;
+    @Value("${default-family-image-url}")
+    private String imgUrl;
     @Override
     public ResponseClient create(CreateFamilyDTO familyDTO ) {
         User user = userService.getUserByEmail(familyDTO.getHostEmail());
+
+        if(!familyDTO.getImageFile().isEmpty()) {
+            try {
+                imgUrl = fileUpload.uploadFile(familyDTO.getImageFile());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         Family family = Family.builder()
                 .host(user)
                 .address(familyDTO.getAddress())
@@ -29,7 +44,9 @@ public class FamilyServiceImpl implements FamilyService {
                 .phone(user.getPhone())
                 .code(familyDTO.getCode())
                 .createdAt(new Date())
+                .imageUrl(imgUrl)
                 .build();
+
         user.setFamily(familyRepository.save(family));
         user.setRole(Role.PARENT);
         userService.save(user);

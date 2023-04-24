@@ -1,3 +1,7 @@
 secret-key: "337336763979244226452948404D635166546A576E5A7234753777217A25432A"
 access-token-expiration: 1800000
 refresh-token-expiration: 60480000012000
+cloud-name: "dzvxrqimt"
+api-key: "448756346232223"
+api-secret: "6F3J3Lryryqhx26WwxIIIOwZDEk"
+default-family-image-url: "https://res.cloudinary.com/dzvxrqimt/image/upload/v1682327796/family_b1pvaz.png"

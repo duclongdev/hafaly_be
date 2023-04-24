@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,7 +16,20 @@ import org.springframework.web.bind.annotation.*;
 public class FamilyController {
     private final FamilyService familyService;
     @PostMapping("create")
-    public ResponseEntity<ResponseClient> createFamily(@RequestBody CreateFamilyDTO createFamilyDTO){
+    public ResponseEntity<ResponseClient> createFamily
+            (@RequestParam("code") String code,
+            @RequestParam("hostEmail") String hostEmail,
+            @RequestParam("phoneNumber") String phoneNumber,
+            @RequestParam("address") String address,
+            @RequestParam("imageFile") MultipartFile imageFile
+    ){
+        CreateFamilyDTO createFamilyDTO = CreateFamilyDTO.builder()
+                .code(code)
+                .hostEmail(hostEmail)
+                .phoneNumber(phoneNumber)
+                .address(address)
+                .imageFile(imageFile)
+                .build();
         ResponseClient responseClient = familyService.create(createFamilyDTO);
         return ResponseEntity.status(responseClient.getHttpStatus())
                 .body(responseClient);
