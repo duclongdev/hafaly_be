@@ -86,4 +86,10 @@ public class HandlerException {
     public ErrorResponse handlerCannotCreateUser(CannotCreateUser ex){
         return new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
+
+    @ExceptionHandler(AfterHandlerException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse thisExceptionWillBeHandled(AfterHandlerException ex){
+        return new ErrorResponse(ex.getCode(), ex.getMessage());
+    }
 }

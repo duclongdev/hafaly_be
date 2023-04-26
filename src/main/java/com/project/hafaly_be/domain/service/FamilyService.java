@@ -8,4 +8,6 @@ public interface FamilyService {
     ResponseClient create(CreateFamilyDTO createFamilyDTO);
 
     ResponseClient getCode();
+
+    Family findByCode(String familyCode);
 }

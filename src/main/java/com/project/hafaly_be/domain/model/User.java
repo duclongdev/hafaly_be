@@ -49,6 +49,12 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Token> tokens;
 
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user")
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    private List<JoinFamily> joinFamilies;
+
     @ManyToOne()
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

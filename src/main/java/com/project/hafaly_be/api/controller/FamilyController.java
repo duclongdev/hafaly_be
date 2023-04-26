@@ -15,14 +15,16 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("api/v1/family")
 public class FamilyController {
     private final FamilyService familyService;
+
     @PostMapping("create")
     public ResponseEntity<ResponseClient> createFamily
             (@RequestParam("code") String code,
-            @RequestParam("hostEmail") String hostEmail,
-            @RequestParam("phoneNumber") String phoneNumber,
-            @RequestParam("address") String address,
-            @RequestParam("imageFile") MultipartFile imageFile
-    ){
+             @RequestParam("hostEmail") String hostEmail,
+             @RequestParam("phoneNumber") String phoneNumber,
+             @RequestParam("address") String address,
+             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile
+            ) {
+        System.out.println("image " + imageFile);
         CreateFamilyDTO createFamilyDTO = CreateFamilyDTO.builder()
                 .code(code)
                 .hostEmail(hostEmail)
@@ -34,6 +36,7 @@ public class FamilyController {
         return ResponseEntity.status(responseClient.getHttpStatus())
                 .body(responseClient);
     }
+
     @GetMapping("get-code")
     public ResponseEntity<ResponseClient> getCode() {
         ResponseClient responseClient = familyService.getCode();

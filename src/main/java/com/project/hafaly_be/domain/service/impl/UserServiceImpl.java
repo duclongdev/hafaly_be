@@ -32,9 +32,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUserRole(String id) {
+    public UserDTO updateUserRole(String id, Role role) {
         User user = userRepository.findById(UUID.fromString(id)).orElseThrow(()->new UserNotFoundException(id));
-        user.setRole(Role.PARENT);
+        user.setRole(role);
         userRepository.save(user);
         System.out.println(user.getRole());
         return UserDTO.builder().email(user.getEmail()).firstName(user.getFirstname()).lastName(user.getLastname())
@@ -44,6 +44,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user) {
         userRepository.save(user);
+    }
+
+    @Override
+    public User findByEmail(String userEmail) {
+        return userRepository.findByEmail(userEmail).orElseThrow(()->new UserNotFoundException(userEmail));
     }
 
 }

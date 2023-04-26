@@ -1,6 +1,7 @@
 package com.project.hafaly_be.api.controller;
 
 import com.project.hafaly_be.api.response.ResponseClient;
+import com.project.hafaly_be.domain.enums.Role;
 import com.project.hafaly_be.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,6 @@ public class UserController {
     private final UserService userService;
     @PutMapping("{userId}/update-role")
     public ResponseClient updateRole(@PathVariable String userId){
-        return new ResponseClient(HttpStatus.OK, userService.updateUserRole(userId));
+        return new ResponseClient(HttpStatus.OK, userService.updateUserRole(userId, Role.PARENT));
     }
 }

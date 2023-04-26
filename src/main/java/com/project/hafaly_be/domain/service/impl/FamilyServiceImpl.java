@@ -1,6 +1,7 @@
 package com.project.hafaly_be.domain.service.impl;
 
 import com.project.hafaly_be.api.dto.CreateFamilyDTO;
+import com.project.hafaly_be.api.exception.customError.UserNotFoundException;
 import com.project.hafaly_be.api.response.ResponseClient;
 import com.project.hafaly_be.domain.enums.Role;
 import com.project.hafaly_be.domain.model.Family;
@@ -30,13 +31,14 @@ public class FamilyServiceImpl implements FamilyService {
     public ResponseClient create(CreateFamilyDTO familyDTO ) {
         User user = userService.getUserByEmail(familyDTO.getHostEmail());
 
-        if(!familyDTO.getImageFile().isEmpty()) {
+        if(familyDTO.getImageFile() != null ) {
             try {
                 imgUrl = fileUpload.uploadFile(familyDTO.getImageFile());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+
         Family family = Family.builder()
                 .host(user)
                 .address(familyDTO.getAddress())
@@ -61,6 +63,12 @@ public class FamilyServiceImpl implements FamilyService {
         }while(familyRepository.existsByCode(code));
         return new ResponseClient(HttpStatus.OK, code);
     }
+
+    @Override
+    public Family findByCode(String familyCode) {
+        return familyRepository.findByCode(familyCode).orElseThrow(()->new UserNotFoundException(familyCode));
+    }
+
     private String randomNumber(){
         Random rnd = new Random();
         return String.valueOf(rnd.nextInt(999999));

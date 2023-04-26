@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 
 @Data
@@ -19,7 +20,10 @@ public class Family {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String familyId;
+    @ToString.Exclude
+    @JsonIgnore
+    private UUID familyId;
+
     private String name;
     private String phone;
     private String address;
@@ -39,4 +43,10 @@ public class Family {
     @JsonIgnore
     @OneToMany(mappedBy = "family")
     private List<User> members;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
+    @OneToMany(mappedBy = "family")
+    private List<JoinFamily> joinFamilies;
 }
