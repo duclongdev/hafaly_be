@@ -7,5 +7,5 @@ import com.project.hafaly_be.domain.enums.StatusRequest;
 public interface JoinFamilyService {
     ResponseClient sendRequest(JoinFamilyDTO joinFamilyDTO);
     ResponseClient handleRequest(String idRequest, StatusRequest typeRequest);
-    ResponseClient getAllRequest(String familyCode);
+    ResponseClient getAllRequest(String familyId);
 }

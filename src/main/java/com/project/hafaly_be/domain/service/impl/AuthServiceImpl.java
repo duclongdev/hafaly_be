@@ -125,11 +125,17 @@ public class AuthServiceImpl implements AuthService {
         String refreshTokenId = String.valueOf(saveToken(user, refreshToken).getId());
         String accessToken = jwtService.generateAccessToken(user, refreshTokenId);
 
+        String familyId = null;
+        if(user.getFamily() != null){
+            familyId = String.valueOf(user.getFamily().getFamilyId());
+        }
+
         UserDTO userDTO = UserDTO.builder()
                 .email(user.getEmail())
                 .firstName(user.getFirstname())
                 .lastName(user.getLastname())
                 .role(String.valueOf(user.getRole()))
+                .familyId(familyId)
                 .build();
         return AuthResponse
                 .builder()
@@ -174,12 +180,17 @@ public class AuthServiceImpl implements AuthService {
                     .message("You must login")
                     .build();
         }
+        String familyId = null;
+        if(user.getFamily() != null){
+            familyId = String.valueOf(user.getFamily().getFamilyId());
+        }
 
         UserDTO userDTO = UserDTO.builder()
                 .email(user.getEmail())
                 .role(String.valueOf(user.getRole()))
                 .firstName(user.getFirstname())
                 .lastName(user.getLastname())
+                .familyId(familyId)
                 .build();
 
         try {

@@ -1,5 +1,5 @@
 secret-key: "337336763979244226452948404D635166546A576E5A7234753777217A25432A"
-access-token-expiration: 1800000
+access-token-expiration: 1800000000
 refresh-token-expiration: 60480000012000
 cloud-name: "dzvxrqimt"
 api-key: "448756346232223"

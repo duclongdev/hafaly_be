@@ -1,13 +1,19 @@
 package com.project.hafaly_be.domain.service.impl;
 
 import com.project.hafaly_be.api.dto.UserDTO;
+import com.project.hafaly_be.api.exception.customError.AfterHandlerException;
 import com.project.hafaly_be.api.exception.customError.EntityNotFoundException;
 import com.project.hafaly_be.api.exception.customError.UserNotFoundException;
 import com.project.hafaly_be.domain.enums.Role;
+import com.project.hafaly_be.domain.model.Family;
 import com.project.hafaly_be.domain.model.User;
 import com.project.hafaly_be.domain.repository.UserRepository;
+import com.project.hafaly_be.domain.service.FamilyService;
 import com.project.hafaly_be.domain.service.UserService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -16,6 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+
     @Override
     public Boolean checkUserExists(String email) {
         return userRepository.existsByEmail(email);
@@ -51,4 +58,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(userEmail).orElseThrow(()->new UserNotFoundException(userEmail));
     }
 
+    @Override
+    public User findById(UUID userId) {
+        return userRepository.findById(userId).orElseThrow(()->new UserNotFoundException(String.valueOf(userId)));
+    }
 }

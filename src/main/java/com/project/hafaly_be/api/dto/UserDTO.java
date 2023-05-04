@@ -35,4 +35,6 @@ public class UserDTO {
     private Boolean gender;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String role;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String familyId;
 }

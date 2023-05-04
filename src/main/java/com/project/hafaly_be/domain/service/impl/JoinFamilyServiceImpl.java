@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -51,19 +52,33 @@ public class JoinFamilyServiceImpl implements JoinFamilyService {
 
     @Override
     public ResponseClient handleRequest(String idRequest, StatusRequest typeRequest) {
-        JoinFamily joinFamily = joinFamilyRepository.findById(UUID.fromString(idRequest)).orElseThrow(() -> new AfterHandlerException(HttpStatus.BAD_REQUEST, "Can not find join family id"));
+        JoinFamily joinFamily = joinFamilyRepository.findById(UUID.fromString(idRequest)).orElseThrow(() -> new AfterHandlerException(HttpStatus.BAD_REQUEST, String.format("Can not find join family id %s", idRequest)));
         joinFamily.setStatusRequest(typeRequest);
         joinFamily.setUpdateAt(new Date());
+        if (joinFamily.getUser().getFamily() != null) {
+            joinFamily.setStatusRequest(StatusRequest.EXPIRED);
+            throw new AfterHandlerException(HttpStatus.BAD_REQUEST, "User have family");
+        }
         if (typeRequest == StatusRequest.ACCEPT) {
             userService.updateUserRole(String.valueOf(joinFamily.getUser().getId()), Role.CHILD);
+            familyService.addMember(joinFamily.getUser().getId(), joinFamily.getFamily().getFamilyId());
+//            User user = userService.getUserById(String.valueOf(joinFamily.getUser().getId()));
+            joinFamily.setStatusRequest(StatusRequest.ACCEPT);
+            joinFamilyRepository.save(joinFamily);
+        }
+        if(typeRequest == StatusRequest.REFUSE){
+            joinFamily.setStatusRequest(StatusRequest.REFUSE    );
         }
         return new ResponseClient(HttpStatus.OK, joinFamilyRepository.save(joinFamily));
     }
 
 
     @Override
-    public ResponseClient getAllRequest(String familyCode) {
-        Family family = familyService.findByCode(familyCode);
-        return new ResponseClient(HttpStatus.OK, joinFamilyRepository.findAllByFamily(family));
+    public ResponseClient getAllRequest(String familyId) {
+        Family family = familyService.findById(familyId);
+        List<JoinFamily> joinFamilyList = joinFamilyRepository.findAllByFamily(family);
+        if (joinFamilyList.size() == 0)
+            throw new AfterHandlerException(HttpStatus.BAD_REQUEST, "no request exists");
+        return new ResponseClient(HttpStatus.OK, joinFamilyList);
     }
 }
