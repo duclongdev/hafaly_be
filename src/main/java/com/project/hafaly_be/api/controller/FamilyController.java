@@ -42,4 +42,6 @@ public class FamilyController {
         ResponseClient responseClient = familyService.getCode();
         return ResponseEntity.status(responseClient.getHttpStatus()).body(responseClient);
     }
+
+
 }
